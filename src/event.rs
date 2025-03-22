@@ -57,6 +57,14 @@ impl EventsPublisher {
                   }
                   Some(Ok(evt)) = crossterm_event => {
                     match evt {
+                      crossterm::event::Event::Key(key) => {
+                        if key.code == crossterm::event::KeyCode::Char('q') {
+                          println!("quit pls");
+                          _sender.send(Event::Key(key)).unwrap();
+                        } else {
+                          println!("tortura");
+                        }
+                      }
                       _ => {
                         // TODO: create an arm for each terminal event you are interested into
                         // eq: arrow keys pressed, enter key, scroll...

@@ -1,3 +1,4 @@
+use crossterm::event::EventStream;
 use ratatui_templates::app::{App, AppResult};
 use ratatui_templates::event::{Event, EventsPublisher};
 use ratatui_templates::handler::handle_key_events;
@@ -10,6 +11,7 @@ use ratatui::Terminal;
 async fn main() -> AppResult<()> {
     // Create an application.
     // let app =
+    let mut app = App::new();
 
     // Setup the terminal
     let backend = CrosstermBackend::new(io::stderr());
@@ -17,12 +19,26 @@ async fn main() -> AppResult<()> {
 
 
     // TODO: create the events pubisher
-    // let events_publisher= ...
+    let events_publisher= EventsPublisher::new(60);
 
     // TODO: init the terminal user interface
-    // let mut tui =
+    let mut tui = Tui::new(terminal, events_publisher);
+    tui.init()?;
 
     // Start the main loop.
+    while app.running {
+        tui.draw(&mut app)?;
+        
+        let event = tui.events.next().await?;
+
+        match event {
+            Event::Key(event)=>handle_key_events(event, &mut app),
+            Event::Tick => Ok(()),
+            Event::Mouse(mouse_event) => todo!(),
+            Event::Resize(_, _) => todo!(),
+        }?;
+        
+    }
     // while app.running {
         // TODO: Render the user interface.
 
@@ -32,6 +48,8 @@ async fn main() -> AppResult<()> {
     // }
 
     // TODO: Reset the terminal if the app has been terminated
+    tui.exit()
 
-    Ok(())
+
+    // Ok(())
 }

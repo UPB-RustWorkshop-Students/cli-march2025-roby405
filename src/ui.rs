@@ -1,4 +1,4 @@
-use ratatui::Frame;
+use ratatui::{widgets::Paragraph, Frame};
 use crate::app::App;
 
 /// Renders the user interface widgets.
@@ -7,6 +7,9 @@ pub fn render(app: &mut App, frame: &mut Frame) {
     // See the following resources:
     // - https://docs.rs/ratatui/latest/ratatui/widgets/index.html
     // - https://github.com/ratatui/ratatui/tree/main/ratatui/examples
+
+    let greeting = Paragraph::new("Hello World! (press 'q' to quit)"); 
+    frame.render_widget(greeting, frame.size());
 
     // TODO: Split the layout
     // let [area1, area2, area3 ...] =

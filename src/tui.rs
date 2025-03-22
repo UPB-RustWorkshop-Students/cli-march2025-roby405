@@ -51,7 +51,7 @@ impl<B: Backend> Tui<B> {
     /// Returns Ok() is no errors occured, Err() otherwhise
     pub fn draw(&mut self, app: &mut App)  -> AppResult<()> {
         // TODO: draw the interface on the terminal
-
+        ratatui::Terminal::draw(&mut self.terminal, |frame| ui::render(app, frame))?;
         // Hint: [`Draw`]: ratatui::Terminal::draw
         // Hint: [`rendering`]: crate::ui:render
 
